@@ -1,0 +1,17 @@
+PAST http://localhost:TINYPORT/cgi-bin/post HTTP/1.1
+Host: localhost
+User-Agent: curl/7.72.0
+Content-Length: 708
+Content-Type: application/x-www-form-urlencoded
+
+## This has DOS returns (\r\n)
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus in volutpat
+dui, in tristique tortor. Ut blandit, nisi id cursus malesuada, lorem diam
+eleifend ipsum, eget maximus sapien ligula nec justo. In faucibus mauris leo, at
+volutpat arcu elementum id. Nulla facilisi. Nulla id ante velit. Vestibulum
+feugiat odio eget velit varius, ornare pellentesque tellus convallis. Integer a
+est ante. Duis molestie quam mi, ut fermentum metus suscipit sit amet. Etiam
+sapien leo, lobortis sit amet quam id, luctus ultricies leo. Vivamus non
+vulputate sem. Aenean leo tortor, blandit eget tellus eu, placerat ullamcorper
+arcu. Aenean feugiat ante non ipsum tincidunt vehicula.

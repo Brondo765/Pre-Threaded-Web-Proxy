@@ -1,0 +1,11 @@
+#!/bin/zsh -f
+
+echo -en "Connection: close\r\n"
+echo -en "Content-type: application/octet-stream\r\n\r\n"
+
+# I expect QUERY_STRING to have a 'size' field.
+size=$(echo "&$QUERY_STRING" | sed 's/.*&size=\([^&]*\).*/\1/')
+
+dd if=/dev/urandom ibs=$size count=1 2> /dev/null
+
+[[ $QUERY_STRING =~ pause ]] && sleep 5

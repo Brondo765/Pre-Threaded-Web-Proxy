@@ -1,0 +1,4 @@
+POST http://localhost:TINYPORT/cgi-bin/post?pause HTTP/1.0
+Content-Length: 100000
+
+Oops

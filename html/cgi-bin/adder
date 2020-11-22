@@ -1,0 +1,12 @@
+#!/bin/zsh -f
+
+echo -en "Connection: close\r\n"
+echo -en "Content-Type: text/html\r\n\r\n"
+
+
+args=("${(@s/&/)QUERY_STRING}")
+
+echo "Welcome to add.com: "
+echo "THE Internet addition portal.\r\n<p>"
+echo "The answer is: $args[1] + $args[2] = $((args[1] + args[2]))\r\n<p>"
+echo "Thanks for visiting!\r\n"

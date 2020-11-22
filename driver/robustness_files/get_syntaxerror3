@@ -1,0 +1,3 @@
+GET http://localhost:TINYPORT/tiny.c HTTP/1.0
+Wrongheader
+

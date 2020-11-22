@@ -1,0 +1,2 @@
+GET http://localhost:TINYPORT/godzilla.jpg WRONGTYPE/WRONG
+

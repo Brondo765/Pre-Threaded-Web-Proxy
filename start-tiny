@@ -1,0 +1,8 @@
+#!/bin/zsh
+
+. driver/check-env.sh
+
+check_env_tiny
+
+cd html
+exec ../tiny/tiny "$@"

@@ -1,0 +1,11 @@
+#!/bin/zsh -f
+
+echo 'Content-Type: text/html'
+echo
+
+echo '<html>Echo POST:<br/><pre>'
+cat
+echo
+echo '</pre><br/>Echo headers, including QUERY_STRING:<br/><pre>'
+env | grep -i '^\(X-\|Proxy\|QUERY_STRING\)'
+echo '</html>'

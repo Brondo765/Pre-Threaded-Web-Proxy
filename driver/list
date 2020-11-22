@@ -1,0 +1,19 @@
+* PART 1: GET -- 50 pts
+    PART 1a: GET (correctness) -- 15 pts
+    PART 1b: GET (checking headers are correctly forwarded). -- 5 pts
+    PART 1c: GET (robustness, syntax) -- 10 pts
+    PART 1d: GET (robustness, connection) -- 10 pts
+    PART 1e: GET (check that the server's output is forwarded in chunks) -- 10 pts
+* PART 2: POST -- 30 pts
+    PART 2a: POST (correctness) -- 20 pts
+    PART 2b: POST (robustness, syntax) -- 5 pts
+    PART 2c: POST (robustness, connection) -- 5 pts
+* PART 3: CONCURRENCY -- 20 pts
+    PART 3a: CONCURRENCY (two files in parallel) -- 10 pts
+    PART 3b: CONCURRENCY (many files in parallel) -- 10 pts
+* BONUS PART: CACHE & POLL-POST -- 50 pts
+    PART Ba: CACHE (Tiny dying) -- 8 pts
+    PART Bb: CACHE (400K files) -- 8 pts
+    PART Bc: CACHE (90K files) -- 8 pts
+    PART Bd: CACHE (check that big objects are not stored) -- 10 pts
+    PART Be: POLL-POST (check that proxy polls between client and server) -- 16 pts

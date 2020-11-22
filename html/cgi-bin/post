@@ -1,0 +1,7 @@
+#!/bin/zsh -f
+echo -en "Connection: close\r\n"
+echo -en "Content-type: application/octet-stream\r\n\r\n"
+
+[[ $QUERY_STRING =~ pause ]] && sleep 4
+
+cat
