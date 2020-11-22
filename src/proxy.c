@@ -30,14 +30,14 @@ static void usage (const char *progname) {
 
 /* Prints diagnostic information to client on error */
 static void clienterror(int connected_fd, char *cause, char *errnum, char *shortmsg, char *longmsg) {
-    char buf[MAXLINE];
-	sprintf(buf, "\r\n");
-    rio_writen(connected_fd, buf, strlen (buf));
-    sprintf(buf, "%s: %s\r\n", errnum, shortmsg);
-    rio_writen (connected_fd, buf, strlen (buf));
-    sprintf(buf, "%s: %s\r\n", longmsg, cause);
-    rio_writen(connected_fd, buf, strlen (buf));
-    return;
+	char buf[MAXLINE];
+    	sprintf(buf, "\r\n");
+    	rio_writen(connected_fd, buf, strlen (buf));
+    	sprintf(buf, "%s: %s\r\n", errnum, shortmsg);
+    	rio_writen (connected_fd, buf, strlen (buf));
+    	sprintf(buf, "%s: %s\r\n", longmsg, cause);
+    	rio_writen(connected_fd, buf, strlen (buf));
+	return;
 }
 
 /* Simple function which formats headers in the buf before request is sent to the server */
@@ -87,8 +87,8 @@ static int parse_request_headers(rio_t *rp, dict_t *headers, char *host, size_t 
 	int n;
 	// Put headers we don't want to change now into dict then into buf
 	dict_put(headers, "Connection", "close\r\n");
-    dict_put(headers, "Proxy-Connection", "close\r\n");
-    dict_put(headers, "User-Agent", USER_AGENT);
+        dict_put(headers, "Proxy-Connection", "close\r\n");
+        dict_put(headers, "User-Agent", USER_AGENT);
 	// Headers should exist, mostly a robustness test
 	if (dict_get(headers, "Connection") ||
 		dict_get(headers, "Proxy-Connection") ||
@@ -135,7 +135,7 @@ static int parse_request(int connected_fd, char *uri, char *host, char *port, ch
 	int host_length, port_length;
 	char http_front[7];
 
-    strncpy(http_front, uri, 7);
+        strncpy(http_front, uri, 7);
 	http_front[7] = '\0';
 
 	// If the URL doesn't start with http:// then error 
@@ -145,7 +145,7 @@ static int parse_request(int connected_fd, char *uri, char *host, char *port, ch
 
 	// Need temp_host storage as headers end with CLRF 
 	char temp_host[MAXLINE];
-    memset(temp_host, 0, MAXLINE);	
+        memset(temp_host, 0, MAXLINE);	
 	temp_pos = strstr(uri, "//"); 	// Get us to // in the uri
 	temp_pos += 2; 					// We move two spots ahead now we just have the host, port, and path leftover to read
 
@@ -170,7 +170,7 @@ static int parse_request(int connected_fd, char *uri, char *host, char *port, ch
 			return -1;
 		}
 	}
-    // Otherwise we just have the path and can tack on the default port of 8080
+        // Otherwise we just have the path and can tack on the default port of 8080
 	else if(*temp_pos2 == '/') {
 		strcpy(path, temp_pos2);
 		sprintf(port, "%d", DEFAULT_PORT);
@@ -181,44 +181,45 @@ static int parse_request(int connected_fd, char *uri, char *host, char *port, ch
 
 /* Forwards request from client to server then writes server reply to client buffer */ 
 static int forward_to_server(int client_fd, rio_t *client_rio, char *host, char *port, char *buf, char *method, char *c_len) {
-	char temp_buf[MAXLINE];
-	int host_fd;
-	rio_t host_rio;
-	size_t n;
-    host_fd = open_clientfd(host, port); // Open a connection to the host on port_num
+      	char temp_buf[MAXLINE];
+      	int host_fd;
+      	rio_t host_rio;
+      	size_t n;
+      	host_fd = open_clientfd(host, port); // Open a connection to the host on port_num
 
-    // If file descriptor for host is an error close connection
-    if (host_fd <= 0) {
-		clienterror(host_fd, host, "503", "Server Unreachable", "Cannot find host");
-        return -1;
-    }
+      	// If file descriptor for host is an error close connection
+      	if (host_fd <= 0) {
+	  	clienterror(host_fd, host, "503", "Server Unreachable", "Cannot find host");
+          	return -1;
+      	}
 
 	// Write request and headers to server (both GET and POST need this to be done)
-	if ((rio_writen(host_fd, buf, strlen(buf))) < 0) {
-		return -1;
+      	if ((rio_writen(host_fd, buf, strlen(buf))) < 0) {
+	  	return -1;
 	}
 
 	// If method is POST we need the payload_size to read and write to the server
 	if (strcmp(method, "POST") == 0) {
 		void *data[MAXLINE];
-        size_t payload_size = atoi(c_len); // Determine payload size
+        	size_t payload_size = atoi(c_len); // Determine payload size
 			
 		// Read in payload, store in data of payload_size
-        if ((n = rio_readnb(client_rio, data, payload_size)) < 0) {
-            return -1;
-        }
+		if ((n = rio_readnb(client_rio, data, payload_size)) < 0) {
+            	return -1;
+        	}
+		
 		// Write payload to server 
-        if ((rio_writen(host_fd, data, n)) < 0) {
-            return -1;
-        }
+        	if ((rio_writen(host_fd, data, n)) < 0) {
+            	return -1;
+        	}
 	}
 
 	rio_readinitb(&host_rio, host_fd); // Robust reader initialize with host file descriptor
 
 	// Read response from server and write back to client in MAXLINE bytes read per line
-    while ((n = rio_readlineb(&host_rio, temp_buf, MAXLINE)) != 0) {
+    	while ((n = rio_readlineb(&host_rio, temp_buf, MAXLINE)) != 0) {
 		rio_writen(client_fd, temp_buf, n);
-    }	
+    	}	
 	close(host_fd);
 	return 0;
 }
@@ -241,7 +242,7 @@ static void *thread(void *vargp) {
 static int serve_client(int connected_fd) {
 	char buf[MAXLINE]; 					// Current buffer read request from client
 	char temp_buf[MAXLINE];   			// temp buffer used to rewrite request in correct format to server
-    char method[MAXLINE];  				// Method holds GET/POST
+    	char method[MAXLINE];  				// Method holds GET/POST
 	char uri[MAXLINE]; 					// uri is (http://host:port/path)
 	char version[MAXLINE]; 				// version holds HTTP/x.x 
 	char host[MAXLINE]; 				// Host holds (mc.cdm.depaul.edu) (localhost)
@@ -252,15 +253,15 @@ static int serve_client(int connected_fd) {
 	int valid; 							// Used for error checking in functions
 	dict_t *headers = dict_create(); 	// Store headers received from request
 	rio_t rio; 							// Client rio
-    rio_readinitb(&rio, connected_fd); 	// Robust reader initialize with client file descriptor
+    	rio_readinitb(&rio, connected_fd); 	// Robust reader initialize with client file descriptor
 
 	// If no request input return to listen state
-    if (!rio_readlineb(&rio, buf, MAXLINE)) {
-        return -1;
-    }
+	if (!rio_readlineb(&rio, buf, MAXLINE)) {
+        	return -1;
+    	}
 
 	// Makes sure the first line in request supports the correct amount of args: GET uri HTTP/x.x
-    sscanf(buf, "%s %s %s", method, uri, version); 
+    	sscanf(buf, "%s %s %s", method, uri, version); 
 	if (method[0] == '\0') {
 		clienterror(connected_fd, "Method", "400", "Bad Request", "Missing arg");
 		return -1;
@@ -293,7 +294,7 @@ static int serve_client(int connected_fd) {
 
 	/* checks whether uri is valid by seeing if it begins with http://, includes a host, the port_num,
 	* and a path to resources.
-    * EX: http://mc.cdm.depaul.edu:8080/cgi-bin/echo.cgi
+    	* EX: http://mc.cdm.depaul.edu:8080/cgi-bin/echo.cgi
 	*/
 	valid = parse_request(connected_fd, uri, host, port_num, path);
 	// If we get an error report to client and go back to listening state
@@ -328,7 +329,7 @@ static int serve_client(int connected_fd) {
 	if (valid == -2) {
 		char temp_hold[MAXLINE * 4]; 	// Large buf to hold multiple request size
 		strcpy(temp_hold, buf); 		// Append first line of request to temp_hold now
-        add_to_buf(headers, temp_hold); // Append to buf first set of headers 
+        	add_to_buf(headers, temp_hold); // Append to buf first set of headers 
 
 		// Loop through all the headers and add to mass_store dict
 		dict_foreach(headers,
@@ -349,7 +350,7 @@ static int serve_client(int connected_fd) {
 				}
 			});
 
-       	 	add_to_buf(headers, temp_hold); // Append to buf with first line in req and set of headers 
+       	 		add_to_buf(headers, temp_hold); // Append to buf with first line in req and set of headers 
 
 			// When we have a 0 return we break looping
 			if (valid == 0) {
@@ -360,34 +361,34 @@ static int serve_client(int connected_fd) {
 		strcat(temp_hold, "\r\n"); // Add CLRF to end of buf
 
 		// Now we send the request to the server
-    	valid = forward_to_server(connected_fd, &rio, host, port_num, temp_hold, method, c_len);
-    	if (valid == -1) {
-        	clienterror(connected_fd, host, "500", "Internal Server Error", "Did not send to");
-        	return -1;
-    	}	
+    		valid = forward_to_server(connected_fd, &rio, host, port_num, temp_hold, method, c_len);
+    		if (valid == -1) {
+        		clienterror(connected_fd, host, "500", "Internal Server Error", "Did not send to");
+        		return -1;
+    		}	
 
 		bzero(temp_hold, MAXLINE * 4);	// Zero out the temp_hold buffer in case of disconnect
-
+	
 	} else { // Otherwise we don't need to send size > MAXLINE requests
-        add_to_buf(headers, buf); 	// Add all the headers in correct format to buf before sending to server
-        strcat(buf, "\r\n"); 		// Cat on a CLRF as the end of a request		
+        	add_to_buf(headers, buf); 	// Add all the headers in correct format to buf before sending to server
+        	strcat(buf, "\r\n"); 		// Cat on a CLRF as the end of a request		
 
 		// For POST requests need to get Content-Length size
 		if (strcmp(method, "POST") == 0) {
 			c_len = dict_get(headers, "Content-Length"); // Get header val of content-length
 
 			// See if content-length is 0 (Not an int or size 0) or negative
-        	if (atoi(c_len) <= 0) {
-            	return -1;
+        		if (atoi(c_len) <= 0) {
+            		return -1;
 			}
 		}
 
 		// Now we send the request to the server same as before
-    	valid = forward_to_server(connected_fd, &rio, host, port_num, buf, method, c_len);
-    	if (valid == -1) {
-        	clienterror(connected_fd, host, "500", "Internal Server Error", "Did not send to");
-        	return -1;
-    	}
+    		valid = forward_to_server(connected_fd, &rio, host, port_num, buf, method, c_len);
+    		if (valid == -1) {
+        		clienterror(connected_fd, host, "500", "Internal Server Error", "Did not send to");
+        		return -1;
+    		}
 	}
 
 	// In case connection closes prematurely with client, zero out all char arrays
@@ -404,7 +405,7 @@ static int serve_client(int connected_fd) {
 	// Destroy headers
 	dict_destroy(headers);
 	dict_destroy(mass_store);
-    return 0;
+    	return 0;
 }
 
 int main(int argc, char **argv) {
