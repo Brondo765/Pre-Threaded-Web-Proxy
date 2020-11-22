@@ -147,7 +147,7 @@ static int parse_request(int connected_fd, char *uri, char *host, char *port, ch
 	char temp_host[MAXLINE];
         memset(temp_host, 0, MAXLINE);	
 	temp_pos = strstr(uri, "//"); 	// Get us to // in the uri
-	temp_pos += 2; 					// We move two spots ahead now we just have the host, port, and path leftover to read
+	temp_pos += 2; 			// We move two spots ahead now we just have the host, port, and path leftover to read
 
 	// Finds the end of host when ':', '/' '/0' or CLRF char found
 	temp_pos2 = strpbrk(temp_pos, " :/\r\n\0");
@@ -240,19 +240,19 @@ static void *thread(void *vargp) {
  * send a request to the server and read the response back to the client.
  */
 static int serve_client(int connected_fd) {
-	char buf[MAXLINE]; 					// Current buffer read request from client
-	char temp_buf[MAXLINE];   			// temp buffer used to rewrite request in correct format to server
-    	char method[MAXLINE];  				// Method holds GET/POST
-	char uri[MAXLINE]; 					// uri is (http://host:port/path)
-	char version[MAXLINE]; 				// version holds HTTP/x.x 
-	char host[MAXLINE]; 				// Host holds (mc.cdm.depaul.edu) (localhost)
-	char path[MAXLINE]; 				// path holds (/) (/cgi-bin) (/home.html)
-	char port_num[MAXLINE]; 			// port_num holds (8080) (3275)
-	char temp_host[MAXLINE]; 			// Used when putting host into dict 
-	char *c_len = NULL 					// Default Content-Length header val in case GET request instead of POST
-	int valid; 							// Used for error checking in functions
+	char buf[MAXLINE]; 			// Current buffer read request from client
+	char temp_buf[MAXLINE];   		// temp buffer used to rewrite request in correct format to server
+    	char method[MAXLINE];  			// Method holds GET/POST
+	char uri[MAXLINE]; 			// uri is (http://host:port/path)
+	char version[MAXLINE]; 			// version holds HTTP/x.x 
+	char host[MAXLINE]; 			// Host holds (mc.cdm.depaul.edu) (localhost)
+	char path[MAXLINE]; 			// path holds (/) (/cgi-bin) (/home.html)
+	char port_num[MAXLINE]; 		// port_num holds (8080) (3275)
+	char temp_host[MAXLINE]; 		// Used when putting host into dict 
+	char *c_len = NULL 			// Default Content-Length header val in case GET request instead of POST
+	int valid; 				// Used for error checking in functions
 	dict_t *headers = dict_create(); 	// Store headers received from request
-	rio_t rio; 							// Client rio
+	rio_t rio; 				// Client rio
     	rio_readinitb(&rio, connected_fd); 	// Robust reader initialize with client file descriptor
 
 	// If no request input return to listen state
@@ -328,7 +328,7 @@ static int serve_client(int connected_fd) {
 	// We used all the buffer room and need to create a hold for multiple request size headers
 	if (valid == -2) {
 		char temp_hold[MAXLINE * 4]; 	// Large buf to hold multiple request size
-		strcpy(temp_hold, buf); 		// Append first line of request to temp_hold now
+		strcpy(temp_hold, buf); 	// Append first line of request to temp_hold now
         	add_to_buf(headers, temp_hold); // Append to buf first set of headers 
 
 		// Loop through all the headers and add to mass_store dict
@@ -411,8 +411,8 @@ static int serve_client(int connected_fd) {
 int main(int argc, char **argv) {
 	int listenfd, connfd; 			// Listenfd listens for incoming connections to the proxy. connfd is the client that connects to the proxy
   	socklen_t client_len; 			// since connfd is a socket connection, need the length in accept() function
-  	struct sockaddr_in client_addr; // client address used in accept() function
-	pthread_t tid; 					// Thread id used when creating pre-threaded environment
+  	struct sockaddr_in client_addr; 	// client address used in accept() function
+	pthread_t tid; 				// Thread id used when creating pre-threaded environment
 
 	// Not enough args provided print usage function
 	if (argc != 2) {
