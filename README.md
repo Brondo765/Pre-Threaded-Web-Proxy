@@ -1,7 +1,7 @@
 Lab 3 (Proxy Lab)
 # CS:APP Proxy Lab
 
-## Breakdown of essential commands:
+## Breakdown of essential commands/files:
 - driver.sh: *The driver*
 - driver/: *Files for the driver*
 - html/: *The default root of the Tiny webserver*
