@@ -271,7 +271,7 @@ static int serve_client(int connected_fd) {
 	if ((strcasecmp(method, "GET") != 0) && (strcasecmp (method, "POST") != 0)) {
 		clienterror(connected_fd, method, "501", "Not Implemented", "Method used is not valid");
 		return -1;
-    }
+    	}
 
 	// uri isn't saved as an arg return error
 	if (uri[0] == '\0') {
