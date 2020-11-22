@@ -1,8 +1,7 @@
 Lab 3 (Proxy Lab)
 # CS:APP Proxy Lab
 
-## This directory contains the files you will need for the CS:APP Proxy Lab.
-
+## Breakdown of essential commands:
 - driver.sh: *The driver*
 - driver/: *Files for the driver*
 - html/: *The default root of the Tiny webserver*
